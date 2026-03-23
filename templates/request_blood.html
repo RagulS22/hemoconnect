@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+<h2 class="text-center text-danger mb-4">Blood Request Form</h2>
+
+<form method="POST">
+
+<div class="mb-3">
+<label>Patient Name</label>
+<input type="text" name="name" class="form-control" required>
+</div>
+
+<div class="mb-3">
+<label>Blood Group</label>
+<select name="blood_group" class="form-control" required>
+<option>A+</option>
+<option>A-</option>
+<option>B+</option>
+<option>B-</option>
+<option>O+</option>
+<option>O-</option>
+<option>AB+</option>
+<option>AB-</option>
+</select>
+</div>
+
+<div class="mb-3">
+<label>City</label>
+<input type="text" name="city" class="form-control" required>
+</div>
+
+<div class="mb-3">
+<label>Hospital</label>
+<input type="text" name="hospital" class="form-control" required>
+</div>
+
+<div class="mb-3">
+<label>Contact Number</label>
+<input type="text" name="phone" class="form-control" required>
+</div>
+
+<button class="btn btn-light w-100">Request Blood</button>
+
+</form>
+
+</div>
+
+{% endblock %}

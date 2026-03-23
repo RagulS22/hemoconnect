@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+<h2 class="text-center text-danger mb-4">Edit My Profile</h2>
+
+<div class="card shadow p-4">
+
+<form method="POST">
+
+<div class="mb-3">
+<label>Phone</label>
+<input type="text" name="phone" class="form-control" value="{{ donor[3] }}">
+</div>
+
+<div class="mb-3">
+<label>City</label>
+<input type="text" name="city" class="form-control" value="{{ donor[4] }}">
+</div>
+
+<div class="mb-3">
+<label>Availability</label>
+<select name="availability" class="form-control">
+
+<option {% if donor[8]=="Available" %}selected{% endif %}>Available</option>
+<option {% if donor[8]=="Not Available" %}selected{% endif %}>Not Available</option>
+
+</select>
+</div>
+
+<button class="btn btn-danger w-100">Update Profile</button>
+
+</form>
+
+</div>
+
+</div>
+
+{% endblock %}

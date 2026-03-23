@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+<h2 class="text-center text-danger mb-4">My Dashboard</h2>
+
+<div class="card shadow-lg p-4">
+
+<h4 class="text-danger mb-3">My Details</h4>
+
+<p><b>Name:</b> {{ donor[1] }}</p>
+<p><b>Blood Group:</b> {{ donor[2] }}</p>
+<p><b>Phone:</b> {{ donor[3] }}</p>
+<p><b>City:</b> {{ donor[4] }}</p>
+<p><b>Age:</b> {{ donor[5] }}</p>
+<p><b>Last Donated:</b> {{ donor[6] }}</p>
+<p><b>Units Donated:</b> {{ donor[7] }}</p>
+
+<hr>
+
+<h4 class="text-danger">Availability Status</h4>
+
+{% if donor[8] == "Available" %}
+<span class="badge bg-success">Available</span>
+{% else %}
+<span class="badge bg-secondary">Not Available</span>
+{% endif %}
+
+<br><br>
+
+<a href="/toggle_availability" class="btn btn-warning">
+Change Availability
+</a>
+
+<a href="/donor_edit" class="btn btn-primary">
+Edit Profile
+</a>
+
+<a href="/logout" class="btn btn-danger">
+Logout
+</a>
+
+</div>
+
+</div>
+
+{% endblock %}

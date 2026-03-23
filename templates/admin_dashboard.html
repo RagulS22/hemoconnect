@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+<h2 class="text-center text-danger mb-4">Admin Dashboard</h2>
+
+<div class="row">
+
+<div class="col-md-4">
+<div class="card shadow text-center p-4">
+<h4>Total Donors</h4>
+<h2>{{ total_donors }}</h2>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card shadow text-center p-4">
+<h4>Available Donors</h4>
+<h2 class="text-success">{{ available_donors }}</h2>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card shadow text-center p-4">
+<h4>Not Available</h4>
+<h2 class="text-secondary">{{ not_available }}</h2>
+</div>
+</div>
+
+</div>
+
+<!-- Chart -->
+<div class="card shadow mt-5 p-4">
+<h4 class="text-center mb-3">Blood Group Distribution</h4>
+<canvas id="bloodChart" height="120"></canvas>
+</div>
+
+<div class="text-center mt-4">
+<a href="/donors" class="btn btn-danger">Manage Donors</a>
+</div>
+
+</div>
+
+<!-- Chart.js -->
+<canvas id="bloodChart"
+data-labels='{{ labels|tojson }}'
+data-values='{{ values|tojson }}'
+height="120"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const canvas = document.getElementById("bloodChart");
+
+const labels = JSON.parse(canvas.dataset.labels);
+const values = JSON.parse(canvas.dataset.values);
+
+new Chart(canvas, {
+    type: "bar",
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "Number of Donors",
+            data: values
+        }]
+    }
+});
+</script>
+
+{% endblock %}

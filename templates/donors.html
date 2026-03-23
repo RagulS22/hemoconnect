@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+<h2 class="text-center text-danger mb-4">Registered Donors</h2>
+
+<table class="table table-bordered table-hover shadow">
+
+<thead class="table-danger">
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Blood Group</th>
+<th>Phone</th>
+<th>City</th>
+<th>Age</th>
+<th>Last Donated</th>
+<th>Units</th>
+<th>Availability</th>
+<th>Eligible</th>
+{% if session.get("admin") %}
+<th>Action</th>
+{% endif %}
+</tr>
+</thead>
+
+<tbody>
+
+{% for donor in donors %}
+<tr>
+
+<td>{{ donor[0] }}</td>
+
+<td>{{ donor[1] }}</td>
+
+<td>{{ donor[2] }}</td>
+
+<td>
+<a href="tel:{{ donor[3] }}" class="text-decoration-none">
+📞 {{ donor[3] }}
+</a>
+</td>
+
+<td>
+<a href="https://www.google.com/maps/search/{{ donor[4] }}" target="_blank">
+📍 {{ donor[4] }}
+</a>
+</td>
+
+<td>{{ donor[5] }}</td>
+
+<td>{{ donor[6] }}</td>
+
+<td>{{ donor[7] }}</td>
+
+<td>
+{% if donor[8] == "Available" %}
+<span class="badge bg-success p-2">Available</span>
+{% else %}
+<span class="badge bg-danger p-2">Not Available</span>
+{% endif %}
+</td>
+
+<td>
+
+{% if donor[9] == "Yes" %}
+<span class="badge bg-success">Eligible</span>
+{% else %}
+<span class="badge bg-secondary">Wait</span>
+{% endif %}
+
+</td>
+
+{% if session.get("admin") %}
+<td>
+
+<a href="/edit/{{ donor[0] }}" class="btn btn-warning btn-sm">
+Edit
+</a>
+
+<a href="/delete/{{ donor[0] }}" class="btn btn-danger btn-sm">
+Delete
+</a>
+
+</td>
+{% endif %}
+
+</tr>
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+
+<form action="/donors" method="get" class="mb-4 text-center">
+
+<input type="text" name="blood_group"
+placeholder="Search by Blood Group"
+class="form-control w-50 d-inline">
+
+<button type="submit" class="btn btn-danger">
+Search
+</button>
+
+</form>
+
+{% endblock %}

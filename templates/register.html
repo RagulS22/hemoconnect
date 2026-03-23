@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-5 animate-box">
+<div class="card shadow-lg p-4" style="background-color: rgba(255,255,255,0.9);">
+
+<h2 class="text-center text-danger mb-4">Donor Registration</h2>
+
+<form method="POST" action="/register">
+
+<!-- Account Section -->
+<h5 class="text-danger mb-3">Account Details</h5>
+
+<div class="mb-3">
+<label>Username</label>
+<input type="text" name="username" class="form-control" required>
+</div>
+
+<div class="mb-4">
+<label>Create Password</label>
+<input type="password" name="password" class="form-control" required>
+</div>
+
+<hr>
+
+<!-- Personal Details -->
+<h5 class="text-danger mb-3 mt-3">Personal Details</h5>
+
+<div class="mb-3">
+<label class="form-label">Full Name</label>
+<input type="text" class="form-control" name="name" required>
+</div>
+
+<div class="mb-3">
+<label class="form-label">Blood Group</label>
+<select class="form-select" name="blood_group" required>
+<option value="">Select Blood Group</option>
+<option>A+</option>
+<option>A-</option>
+<option>B+</option>
+<option>B-</option>
+<option>O+</option>
+<option>O-</option>
+<option>AB+</option>
+<option>AB-</option>
+</select>
+</div>
+
+<div class="mb-3">
+<label class="form-label">Phone Number</label>
+<input type="text" class="form-control" name="phone" required>
+</div>
+
+<div class="mb-3">
+<label class="form-label">City</label>
+<input type="text" class="form-control" name="city" required>
+</div>
+
+<div class="mb-3">
+<label>Age</label>
+<input type="number" name="age" class="form-control">
+</div>
+
+<div class="mb-3">
+<label>Last Donated Date</label>
+<input type="date" name="last_donated" class="form-control">
+</div>
+
+<div class="mb-3">
+<label>Units Donated</label>
+<input type="number" name="units" class="form-control">
+</div>
+
+<div class="mb-4">
+<label>Availability</label>
+<select name="availability" class="form-control">
+<option value="Available">Available</option>
+<option value="Not Available">Not Available</option>
+</select>
+</div>
+
+<button type="submit" class="btn btn-danger w-100">
+Register Now
+</button>
+
+</form>
+
+</div>
+</div>
+
+{% endblock %}

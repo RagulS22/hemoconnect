@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- ================= HERO SECTION ================= -->
+<div class="hero">
+    <div class="container">
+        <div class="row align-items-center">
+
+            <!-- Left Content -->
+            <div class="col-md-6">
+                <h1 class="hero-title">
+                    Connecting Donors.<br>
+                    <span class="highlight">Saving Lives.</span>
+                </h1>
+
+                <p class="hero-subtitle">
+                    A smart and reliable platform to find blood donors instantly during emergencies.
+                </p>
+
+                <div class="mt-4">
+                    <a href="/register" class="btn btn-main me-3">Become a Donor</a>
+                    <button onclick="showSearch()" class="btn btn-outline-danger">Find Donor</button>
+                </div>
+            </div>
+
+            <!-- Right Image -->
+            <div class="col-md-6 text-center">
+                <img src="{{ url_for('static', filename='images/hemo.png') }}" 
+                class="hero-img img-fluid">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- SEARCH SECTION -->
+<div id="searchBox" style="display:none;" class="container mt-5">
+
+<div class="card shadow p-4">
+
+<h3 class="text-center text-danger">Search Blood Donor</h3>
+
+<form action="/search" method="POST">
+
+<label>Blood Group</label>
+<select name="blood_group" class="form-control">
+<option>A+</option>
+<option>A-</option>
+<option>B+</option>
+<option>B-</option>
+<option>O+</option>
+<option>O-</option>
+<option>AB+</option>
+<option>AB-</option>
+</select>
+
+<label class="mt-3">City</label>
+<input type="text" name="city" class="form-control" placeholder="Enter City">
+
+<div class="text-center">
+<button type="submit" class="btn btn-danger mt-4">
+Search
+</button>
+</div>
+
+</form>
+
+</div>
+</div>
+
+<!-- ================= STATS SECTION ================= -->
+<div class="stats-section" id="stats">
+    <div class="container">
+        <div class="row text-center">
+
+            <div class="col-md-4 mb-4">
+                <div class="stat-box">
+                    <h2><span class="counter" data-target="150">0</span>+</h2>
+                    <p>Registered Donors</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="stat-box">
+                    <h2><span class="counter" data-target="20">0</span>+</h2>
+                    <p>Active This Week</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="stat-box">
+                    <h2><span class="counter" data-target="10">0</span>+</h2>
+                    <p>Cities Covered</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ================= EMERGENCY SECTION ================= -->
+<div class="cta-section text-center">
+    <div class="container">
+        <h2>Need Blood Urgently?</h2>
+        <p class="mt-3">
+            Browse available donors in your city and connect instantly.
+        </p>
+       <div class="mt-3 d-flex justify-content-center gap-3">
+    <a href="/donors" class="btn btn-light px-4">View Donors</a>
+    <a href="/request_blood" class="btn btn-light px-4">Request Blood</a>
+</div>
+    </div>
+</div>
+
+<script>
+const counters = document.querySelectorAll('.counter');
+const statsSection = document.querySelector('#stats');
+
+let started = false;
+
+function startCounter() {
+    counters.forEach(counter => {
+        const target = +counter.getAttribute('data-target');
+        let count = 0;
+
+        const increment = target / 100;
+
+        const updateCounter = () => {
+            if (count < target) {
+                count += increment;
+                counter.innerText = Math.ceil(count);
+                setTimeout(updateCounter, 20);
+            } else {
+                counter.innerText = target;
+            }
+        };
+
+        updateCounter();
+    });
+}
+
+const observer = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting && !started) {
+        startCounter();
+        started = true; // Prevent repeat animation
+    }
+}, {
+    threshold: 0.5
+});
+
+observer.observe(statsSection);
+</script>
+
+<script>
+function showSearch() {
+document.getElementById("searchBox").style.display = "block";
+}
+</script>
+
+{% endblock %}
