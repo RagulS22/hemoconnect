@@ -21,14 +21,14 @@ mail = Mail(app)
 
 # -------- EMAIL FUNCTION --------
 def send_email(to):
-    #msg = Message(
+    msg = Message(
         "Blood Request Alert",
         sender="hemoconnect123@gmail.com",
         recipients=[to]
     )
     msg.body = "Urgent blood request in your area. Please login and help."
 
-    #mail.send(msg)
+    mail.send(msg)
 
 @app.route("/")
 def home():
