@@ -1,3 +1,4 @@
+from flask_mail import Mail, Message
 from flask import Flask, render_template, request, redirect, session
 from datetime import datetime, timedelta
 import sqlite3
@@ -9,11 +10,35 @@ db_path = os.path.join(BASE_DIR, "blood.db")
 app = Flask(__name__)
 app.secret_key = "mysecretkey"
 
+# -------- EMAIL CONFIGURATION --------
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'hemoconnect123@gmail.com'
+app.config['MAIL_PASSWORD'] = 'makxhjobqdupkgxd'
+
+mail = Mail(app)
+
+# -------- EMAIL FUNCTION --------
+def send_email(to):
+    msg = Message(
+        "Blood Request Alert",
+        sender="hemoconnect123@gmail.com",
+        recipients=[to]
+    )
+    msg.body = "Urgent blood request in your area. Please login and help."
+
+    mail.send(msg)
+
 @app.route("/")
 def home():
     return render_template("index.html")
 
-    
+@app.route("/test_email")
+def test_email():
+    send_email("hemoconnect123@gmail.com")
+    return "Email Sent Successfully!"
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
@@ -22,6 +47,7 @@ def register():
         name = request.form["name"]
         blood_group = request.form["blood_group"]
         phone = request.form["phone"]
+        email = request.form.get("email")
         city = request.form["city"]
         age = request.form["age"]
         last_donated = request.form["last_donated"]
@@ -35,17 +61,26 @@ def register():
 
         cursor.execute("""
         INSERT INTO donors
-        (name,blood_group,phone,city,age,last_donated,units,availability,username,password)
-        VALUES (?,?,?,?,?,?,?,?,?,?)
-        """,(name,blood_group,phone,city,age,last_donated,units,availability,username,password))
+        (name,blood_group,phone,email,city,age,last_donated,units,availability,username,password)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?)
+        """,(name,blood_group,phone,email,city,age,last_donated,units,availability,username,password))  
 
         conn.commit()
         conn.close()
 
+        if email:
+            msg = Message(
+            "Welcome to HemoConnect",
+              sender="hemoconnect123@gmail.com",  
+              recipients=[email]
+            )
+            msg.body = f"Hi {name}, Thanks for registering with us ❤️"
+            mail.send(msg)
+
         return redirect("/donors")
 
     return render_template("register.html")
-    
+
 @app.route("/donors")
 def donors():
 
@@ -270,19 +305,15 @@ def admin_dashboard():
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    # Total donors
     cursor.execute("SELECT COUNT(*) FROM donors")
     total_donors = cursor.fetchone()[0]
 
-    # Available donors
     cursor.execute("SELECT COUNT(*) FROM donors WHERE availability='Available'")
     available_donors = cursor.fetchone()[0]
 
-    # Not available donors
     cursor.execute("SELECT COUNT(*) FROM donors WHERE availability='Not Available'")
     not_available = cursor.fetchone()[0]
 
-    # Blood group chart
     cursor.execute("SELECT blood_group, COUNT(*) FROM donors GROUP BY blood_group")
     data = cursor.fetchall()
 
@@ -304,29 +335,89 @@ def admin_dashboard():
         values=values
     )
 
-@app.route("/request_blood", methods=["GET","POST"])
+@app.route("/request_blood", methods=["GET", "POST"])
 def request_blood():
 
     if request.method == "POST":
-
+        name = request.form["name"]
         blood_group = request.form["blood_group"]
+        city = request.form["city"]
+        hospital = request.form["hospital"]
+        phone = request.form["phone"]
 
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
 
         cursor.execute("""
-        SELECT * FROM donors 
-        WHERE blood_group=? AND availability='Available'
-        """,(blood_group,))
+        SELECT email FROM donors
+        WHERE blood_group=? AND city=? AND availability='Available'
+        """, (blood_group, city))
 
         donors = cursor.fetchall()
-
         conn.close()
 
-        return render_template("donors.html", donors=donors)
+        email_list = [d[0] for d in donors if d[0]]
+
+        if email_list:
+            msg = Message(
+                "🚨 Urgent Blood Request",
+                sender="yourgmail@gmail.com",
+                recipients=email_list
+            )
+
+            msg.body = f"""
+Urgent Blood Requirement!
+
+Patient Name: {name}
+Blood Group: {blood_group}
+City: {city}
+Hospital: {hospital}
+Contact: {phone}
+
+Please help if you are available 🙏
+"""
+
+            mail.send(msg)
+            return render_template("request_success.html")
+
+        else:
+            return render_template("no_donors.html")
 
     return render_template("request_blood.html")
 
+@app.route("/dashboard")
+def dashboard():
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT COUNT(*) FROM donors")
+    total_donors = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT(*) FROM donors WHERE availability='Available'")
+    available_donors = cursor.fetchone()[0]
+
+    conn.close()
+
+    return render_template(
+        "dashboard.html",
+        total_donors=total_donors,
+        available_donors=available_donors
+    )
+
+@app.route("/view_donors")
+def view_donors():
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+SELECT id,name,blood_group,phone,email,city,age,last_donated,units,availability
+FROM donors
+""")
+    donors = cursor.fetchall()
+
+    conn.close()
+
+    return render_template("donors.html", donors=donors)
+
 if __name__ == "__main__":
     app.run(debug=True)
-

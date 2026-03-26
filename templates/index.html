@@ -114,6 +114,9 @@ Search
 </div>
 
 <script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
 const counters = document.querySelectorAll('.counter');
 const statsSection = document.querySelector('#stats');
 
@@ -143,13 +146,16 @@ function startCounter() {
 const observer = new IntersectionObserver(entries => {
     if (entries[0].isIntersecting && !started) {
         startCounter();
-        started = true; // Prevent repeat animation
+        started = true;
     }
 }, {
     threshold: 0.5
 });
 
 observer.observe(statsSection);
+
+});
+
 </script>
 
 <script>

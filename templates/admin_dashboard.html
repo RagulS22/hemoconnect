@@ -31,10 +31,17 @@
 
 </div>
 
-<!-- Chart -->
-<div class="card shadow mt-5 p-4">
-<h4 class="text-center mb-3">Blood Group Distribution</h4>
-<canvas id="bloodChart" height="120"></canvas>
+<!-- Chart Section -->
+<div class="card p-4 shadow mt-4">
+
+<h4 class="text-center mb-4">Blood Group Distribution</h4>
+
+<canvas id="bloodChart"
+data-labels='{{ labels|tojson }}'
+data-values='{{ values|tojson }}'
+height="120">
+</canvas>
+
 </div>
 
 <div class="text-center mt-4">
@@ -44,14 +51,10 @@
 </div>
 
 <!-- Chart.js -->
-<canvas id="bloodChart"
-data-labels='{{ labels|tojson }}'
-data-values='{{ values|tojson }}'
-height="120"></canvas>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+
 const canvas = document.getElementById("bloodChart");
 
 const labels = JSON.parse(canvas.dataset.labels);
@@ -63,10 +66,30 @@ new Chart(canvas, {
         labels: labels,
         datasets: [{
             label: "Number of Donors",
-            data: values
+            data: values,
+            backgroundColor: [
+                "#ff4d4d",
+                "#ff6b6b",
+                "#ff8787",
+                "#ffa8a8",
+                "#ffc9c9",
+                "#ff4d6d",
+                "#ff758f",
+                "#ff8fa3"
+            ],
+            borderRadius: 5
         }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
     }
 });
+
 </script>
 
 {% endblock %}

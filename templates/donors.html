@@ -14,6 +14,7 @@
 <th>Name</th>
 <th>Blood Group</th>
 <th>Phone</th>
+<th>E mail</th>
 <th>City</th>
 <th>Age</th>
 <th>Last Donated</th>
@@ -44,19 +45,25 @@
 </td>
 
 <td>
-<a href="https://www.google.com/maps/search/{{ donor[4] }}" target="_blank">
-📍 {{ donor[4] }}
+<a href="mailto:{{ donor[4] }}">
+📧 {{ donor[4] }}
 </a>
 </td>
 
-<td>{{ donor[5] }}</td>
+<td>
+<a href="https://www.google.com/maps/search/{{ donor[5] }}" target="_blank">
+📍 {{ donor[5] }}
+</a>
+</td>
 
 <td>{{ donor[6] }}</td>
 
 <td>{{ donor[7] }}</td>
 
+<td>{{ donor[8] }}</td>
+
 <td>
-{% if donor[8] == "Available" %}
+{% if donor[9] == "Available" %}
 <span class="badge bg-success p-2">Available</span>
 {% else %}
 <span class="badge bg-danger p-2">Not Available</span>
@@ -65,7 +72,7 @@
 
 <td>
 
-{% if donor[9] == "Yes" %}
+{% if donor[10] == "Yes" %}
 <span class="badge bg-success">Eligible</span>
 {% else %}
 <span class="badge bg-secondary">Wait</span>

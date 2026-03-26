@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2 class="text-center text-danger mb-4">Dashboard</h2>
+
+    <div class="row">
+
+        <!-- Total Donors -->
+        <div class="col-md-6">
+            <div class="card shadow p-4 text-center">
+                <h5>Total Donors</h5>
+                <h2 class="text-primary">{{ total_donors }}</h2>
+            </div>
+        </div>
+
+        <!-- Available Donors -->
+        <div class="col-md-6">
+            <div class="card shadow p-4 text-center">
+                <h5>Available Donors</h5>
+                <h2 class="text-success">{{ available_donors }}</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Buttons -->
+    <div class="text-center mt-5">
+
+        <a href="/request_blood" class="btn btn-danger m-2">
+            🩸 Request Blood
+        </a>
+
+        <a href="/view_donors" class="btn btn-primary">
+            👥 View Donors
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}
