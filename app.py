@@ -21,7 +21,7 @@ mail = Mail(app)
 
 # -------- EMAIL FUNCTION --------
 def send_email(to):
-    msg = Message(
+    #msg = Message(
         "Blood Request Alert",
         sender="hemoconnect123@gmail.com",
         recipients=[to]
